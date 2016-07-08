@@ -17,6 +17,9 @@
 注意：由于电脑不同，所以可能外接设备也有所不同，我们需要的只是其中第三行的　Touchpad的　id值，以我的为例，此处id为10;
 记住这个id值，下面shell脚本要用到
 
+没有vim使用vi或者gedit
+~$ vim touchpadCtrl  
+
 #!/bin/bash
 
 #此处注意 list-props 为上面查看到的ip的值，我的电脑为10
@@ -36,3 +39,10 @@ elif [ ${var:((${#var}-1))} == "0" ];then
 fi
 
 
+wq保存推出以后给touchpadCtrl 增加可执行权限
+~$ chmod a+x touchpadCtrl
+然后执行脚本看是否关闭开启触控板
+
+成功以后，在通过ubuntu系统设置－键盘－快捷键，找到自定义快捷键，点击加号，新建touchpad控制的快捷键
+名称可以随便输，例如touchpadCtrl,
+命令输入刚才shell脚本的路径 ~/touchpadCtrl,保存，点击刚新建快捷键的后面的禁用，然后输入想使用的快捷键，就可以啦
