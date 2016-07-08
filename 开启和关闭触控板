@@ -1,0 +1,38 @@
+首先打开终端，键入入以下命令，查看输入设备Touchpad的ＩＤ
+
+~$ xinput list
+
+会出现以下结果：
+
+⎡ Virtual core pointer                    	id=2	[master pointer  (3)]
+⎜   ↳ Virtual core XTEST pointer              	id=4	[slave  pointer  (2)]
+⎜   ↳ SYN2602:00 06CB:2871 Touchpad           	id=10	[slave  pointer  (2)]
+⎣ Virtual core keyboard                   	id=3	[master keyboard (2)]
+    ↳ Virtual core XTEST keyboard             	id=5	[slave  keyboard (3)]
+    ↳ Power Button                            	id=6	[slave  keyboard (3)]
+    ↳ Video Bus                               	id=7	[slave  keyboard (3)]
+    ↳ Power Button                            	id=8	[slave  keyboard (3)]
+    ↳ ATIV Real HD Camera                     	id=9	[slave  keyboard (3)]
+    ↳ AT Translated Set 2 keyboard            	id=11	[slave  keyboard (3)]
+注意：由于电脑不同，所以可能外接设备也有所不同，我们需要的只是其中第三行的　Touchpad的　id值，以我的为例，此处id为10;
+记住这个id值，下面shell脚本要用到
+
+#!/bin/bash
+
+#此处注意 list-props 为上面查看到的ip的值，我的电脑为10
+#你的电脑查看到的是多少，就将下面脚本第一行中的list-props中的10修改为多少!
+
+#查看Touchpad设备的可用状态;
+var=$(xinput list-props 10 | grep "Device Enabled") 
+
+#将上面查到的结果获取到最后一个字符，也就是启用状态值，如果为1，就是启用，那么我们通过命令xinput set-prop 将其值设置为0;
+#即为关闭
+if [ ${var:((${#var}-1))} == "1" ];then
+        xinput set-prop 10 "Device Enabled" 0
+
+＃反之如果为0，则为关闭,设置为1开启触控板
+elif [ ${var:((${#var}-1))} == "0" ];then
+        xinput set-prop 10 "Device Enabled" 1
+fi
+
+
